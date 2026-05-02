@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brain Tumor Detection System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <div class="logo-icon">
+          <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+            <circle cx="14" cy="14" r="12" stroke="#00e5ff" stroke-width="1.5"/>
+            <path d="M8 14 Q14 6 20 14 Q14 22 8 14Z" fill="#00e5ff" opacity="0.3"/>
+            <circle cx="14" cy="14" r="3" fill="#00e5ff"/>
+          </svg>
+        </div>
+        <div>
+          <span class="logo-title">NeuroScan AI</span>
+          <span class="logo-sub">Brain Tumor Detection</span>
+        </div>
+      </div>
+      <div class="header-info">
+        <span class="badge">EfficientNet · MobileNetV2</span>
+        <span class="badge">89.4% Accuracy</span>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero-text">
+        <h1>AI-Powered<br><span class="accent">Brain MRI</span><br>Analysis</h1>
+        <p>Upload an MRI scan and get instant tumor detection with location annotation. Supports Glioma, Meningioma, Pituitary tumor, and No Tumor classification.</p>
+        <div class="stats-row">
+          <div class="stat"><span class="stat-num">4</span><span class="stat-label">Tumor Types</span></div>
+          <div class="stat"><span class="stat-num">89%</span><span class="stat-label">Accuracy</span></div>
+          <div class="stat"><span class="stat-num">&lt;2s</span><span class="stat-label">Analysis Time</span></div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="scan-ring"></div>
+        <div class="scan-ring ring2"></div>
+        <div class="scan-ring ring3"></div>
+        <svg class="brain-svg" viewBox="0 0 120 120" fill="none">
+          <path d="M60 20 C35 20 18 38 18 58 C18 72 26 82 38 87 C38 95 44 100 52 100 L68 100 C76 100 82 95 82 87 C94 82 102 72 102 58 C102 38 85 20 60 20Z" stroke="#00e5ff" stroke-width="1.5" fill="none" opacity="0.6"/>
+          <path d="M60 20 C60 20 55 35 55 50 C55 65 60 75 60 75" stroke="#00e5ff" stroke-width="1" opacity="0.4"/>
+          <path d="M38 50 C45 45 55 47 60 50 C65 53 75 55 82 50" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+          <path d="M35 65 C42 60 52 63 60 65 C68 67 78 62 85 65" stroke="#00e5ff" stroke-width="1" opacity="0.3"/>
+          <circle cx="60" cy="50" r="2" fill="#00e5ff" opacity="0.8"/>
+          <circle cx="45" cy="60" r="1.5" fill="#00e5ff" opacity="0.5"/>
+          <circle cx="75" cy="60" r="1.5" fill="#00e5ff" opacity="0.5"/>
+        </svg>
+      </div>
+    </section>
+
+    <!-- Upload Section -->
+    <section class="upload-section">
+      <div class="upload-card" id="uploadCard">
+        <div class="upload-zone" id="dropZone">
+          <input type="file" id="fileInput" accept="image/*" hidden>
+          <div class="upload-icon">
+            <svg width="48" height="48" viewBox="0 0 48 48" fill="none">
+              <rect x="8" y="8" width="32" height="32" rx="8" stroke="#00e5ff" stroke-width="1.5" stroke-dasharray="4 2"/>
+              <path d="M24 30 L24 18 M18 24 L24 18 L30 24" stroke="#00e5ff" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <p class="upload-title">Drop MRI scan here</p>
+          <p class="upload-sub">or <button class="browse-btn" onclick="document.getElementById('fileInput').click()">browse file</button></p>
+          <p class="upload-hint">Supports JPG, PNG, JPEG</p>
+        </div>
+
+        <!-- Preview -->
+        <div class="preview-zone" id="previewZone" style="display:none">
+          <img id="previewImg" src="" alt="Preview">
+          <div class="preview-info">
+            <span id="fileName" class="file-name"></span>
+            <button class="change-btn" onclick="resetUpload()">Change</button>
+          </div>
+        </div>
+
+        <button class="analyze-btn" id="analyzeBtn" onclick="analyzeImage()" disabled>
+          <span class="btn-text">Analyze MRI</span>
+          <span class="btn-icon">→</span>
+        </button>
+      </div>
+    </section>
+
+    <!-- Loading -->
+    <div class="loading-overlay" id="loading" style="display:none">
+      <div class="loading-box">
+        <div class="pulse-ring"></div>
+        <div class="pulse-ring p2"></div>
+        <p>Analyzing MRI scan...</p>
+        <span>AI model processing</span>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <section class="results-section" id="resultsSection" style="display:none">
+
+      <div class="result-header">
+        <h2>Analysis Complete</h2>
+        <button class="new-scan-btn" onclick="resetAll()">+ New Scan</button>
+      </div>
+
+      <!-- Diagnosis Card -->
+      <div class="diagnosis-card" id="diagnosisCard">
+        <div class="diagnosis-left">
+          <div class="diagnosis-label">Detected</div>
+          <div class="diagnosis-name" id="diagnosisName">—</div>
+          <div class="confidence-row">
+            <span class="conf-label">Confidence</span>
+            <span class="conf-value" id="confValue">—</span>
+          </div>
+          <div class="conf-bar-wrap">
+            <div class="conf-bar" id="confBar"></div>
+          </div>
+          <p class="diagnosis-desc" id="diagnosisDesc">—</p>
+          <div class="advice-box" id="adviceBox">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.2"/>
+              <path d="M7 6V10M7 4.5V5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+            </svg>
+            <span id="adviceText">—</span>
+          </div>
+        </div>
+        <div class="diagnosis-right">
+          <div class="prob-chart">
+            <div class="prob-title">All Probabilities</div>
+            <div id="probBars"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Images -->
+      <div class="images-grid">
+        <div class="img-card">
+          <div class="img-label">Original MRI</div>
+          <img id="originalImg" src="" alt="Original">
+        </div>
+        <div class="img-card">
+          <div class="img-label">Annotated Result</div>
+          <img id="annotatedImg" src="" alt="Annotated">
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>M. Saddique · Reg# 2022-ag-6314 · University of Agriculture Faisalabad — Sub Campus Toba Tek Singh</p>
+    <p>Final Year Project · BS Computer Science · 2022–2026</p>
+  </footer>
+
+  <script src="/static/script.js"></script>
+</body>
+</html>
