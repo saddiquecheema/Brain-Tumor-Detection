@@ -1,0 +1,23 @@
+# ============================================================
+#  Brain Tumor MRI Classification System
+#  Python 3.10
+#  Install: pip install -r requirements.txt
+# ============================================================
+
+# ── Deep Learning ─────────────────────────────────────────────
+tensorflow>=2.16.1          # Includes Keras 3 by default
+# keras is now part of tensorflow 2.16+, but for compatibility:
+keras>=3.0.0
+
+# ── Image Processing ──────────────────────────────────────────
+opencv-python==4.9.0.80     # tumor region annotation (bounding box)
+Pillow==10.3.0              # image open / convert / resize
+numpy==1.26.4               # array operations
+
+# ── Web Framework ─────────────────────────────────────────────
+flask==3.1.0                # web server & routing
+flask-cors==5.0.0           # cross-origin requests
+
+# ── AI Chatbot — NeuroGuide ───────────────────────────────────
+groq==0.9.0                 # Groq API — Llama 3.3 70B (free)
+python-dotenv==1.0.1        # .env file se GROQ_API_KEY load karna

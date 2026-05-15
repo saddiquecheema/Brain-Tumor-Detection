@@ -1,9 +1,72 @@
-brain/
-.vscode/
+# __pycache__/
+myenv/
+scripts/
+Lib/
+Include/
+
+# Python cache
 __pycache__/
-*.py[cod]
-*$py.class
-.venv/
-env/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
 venv/
+env/
+.venv/
+
+# Environment variables
 .env
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Model files (optional if too large)
+*.h5
+*.keras
+*.pt
+*.pth
+
+# Dataset
+data/
+dataset/
+datasets/
+
+# Logs
+logs/
+*.log
+
+# Output files
+outputs/
+predictions/
+results/
+
+# Excel files
+*.xlsx
+*.csv
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# Flask instance files
+instance/
+
+# Uploaded MRI images
+uploads/
+
+# Temporary files
+temp/
+tmp/
+
+# Build files
+build/
+dist/
+*.egg-info/
