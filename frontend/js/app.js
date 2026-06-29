@@ -7,7 +7,11 @@
 // │  For Vercel+ngrok: set to your ngrok URL                │
 // │  Example: "https://xxxx.ngrok-free.app"                 │
 // └─────────────────────────────────────────────────────────┘
-const API_BASE = "";
+const API_BASE = " https://occupy-smokiness-unskilled.ngrok-free.dev";
+
+const API_HEADERS = {
+  'ngrok-skip-browser-warning': 'true'
+};
 
 const icons = { glioma: '🔴', meningioma: '🟠', notumor: '🟢', pituitary: '🟡' };
 const labels = {
@@ -46,13 +50,31 @@ function handleFile(f) {
   document.getElementById('chat-msgs').innerHTML = '<div class="msg bot">Hi! I am medical assistant. How can I help you understand your results?</div>';
 }
 
+async function parseJsonResponse(response) {
+  const contentType = response.headers.get('content-type') || '';
+
+  if (!contentType.includes('application/json')) {
+    const text = await response.text();
+    if (text.includes('ngrok') || text.includes('The page')) {
+      throw new Error('Ngrok warning page received. Check your current ngrok URL and keep ngrok-skip-browser-warning enabled.');
+    }
+    throw new Error('Server returned HTML/text instead of JSON. Please check the backend URL.');
+  }
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.error || `Request failed with status ${response.status}`);
+  }
+  return data;
+}
+
 function analyze() {
   if (!selectedFile) return;
   const btn = document.getElementById('analyze-btn');
   btn.classList.add('loading'); btn.disabled = true; hideErr();
   const fd = new FormData(); fd.append('file', selectedFile);
-  fetch(`${API_BASE}/predict`, { method: 'POST', body: fd })
-    .then(r => r.json()).then(d => {
+  fetch(`${API_BASE}/predict`, { method: 'POST', headers: API_HEADERS, body: fd })
+    .then(parseJsonResponse).then(d => {
       btn.classList.remove('loading'); btn.disabled = false;
       if (d.error) { showErr(d.error); return; }
       showResults(d);
@@ -126,10 +148,10 @@ async function sendMessage() {
   try {
     const resp = await fetch(`${API_BASE}/chat`, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: { ...API_HEADERS, 'Content-Type': 'application/json' },
       body: JSON.stringify({ message: text, history: chatHistory.slice(-10) })
     });
-    const data = await resp.json();
+    const data = await parseJsonResponse(resp);
     removeTyping();
     if (data.error) {
       addMsg('⚠️ Error: ' + data.error, 'bot');
