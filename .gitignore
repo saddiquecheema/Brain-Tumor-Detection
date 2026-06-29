@@ -1,27 +1,25 @@
-# __pycache__/
-myenv/
-scripts/
-Lib/
-Include/
-
 # Python cache
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
+__init__.py
 
+run.py
 # Virtual environment
 venv/
 env/
 .venv/
+myenv/
 
 # Environment variables
 .env
+backend/.env
 
 # Jupyter Notebook checkpoints
 .ipynb_checkpoints/
 
-# Model files (optional if too large)
+# Model files (too large for Git)
 *.h5
 *.keras
 *.pt
@@ -52,6 +50,7 @@ Thumbs.db
 # IDE files
 .vscode/
 .idea/
+.gemini/
 
 # Streamlit
 .streamlit/secrets.toml

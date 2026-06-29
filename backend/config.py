@@ -2,7 +2,7 @@ import os
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
-load_dotenv()
+load_dotenv(os.path.join(os.path.dirname(os.path.abspath(__file__)), '.env'))
 
 
 # ── Paths ─────────────────────────────────────────────────────────────
@@ -24,7 +24,7 @@ GROQ_URL     = "https://api.groq.com/openai/v1/chat/completions"
 # ── Disease Information ───────────────────────────────────────────────
 DESCRIPTIONS = {
     'glioma':     'A tumor located within the brain tissue. Please consult a doctor immediately.',
-    'meningioma': 'A tumor found in the brain’s protective covering. It is often treatable with surgery.',
+    'meningioma': 'A tumor found in the brain\u2019s protective covering. It is often treatable with surgery.',
     'notumor':    'The MRI appears normal. No tumor has been detected.',
     'pituitary':  'A tumor in the hormone (pituitary) gland. Treatment options are available.'
 }

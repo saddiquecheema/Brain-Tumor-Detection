@@ -1,15 +1,27 @@
 import os
 import io
 import numpy as np
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, send_from_directory
+from flask_cors import CORS
 from PIL import Image
 
 # Import custom modules
 import config
 import logic
 
-# Initialize Flask
-app = Flask(__name__)
+# ── Flask App Setup ───────────────────────────────────────────────────
+# Frontend files are in ../frontend/ relative to this backend/ folder
+FRONTEND_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'frontend')
+
+app = Flask(
+    __name__,
+    template_folder=FRONTEND_DIR,
+    static_folder=FRONTEND_DIR,
+    static_url_path='/static'
+)
+
+# Enable CORS for Vercel/ngrok cross-origin requests
+CORS(app)
 
 # Global variables for model and indices
 model = None
@@ -36,6 +48,16 @@ if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not app.debug:
 @app.route('/')
 def index():
     return render_template('index.html')
+
+# Serve CSS files from frontend/css/
+@app.route('/css/<path:filename>')
+def serve_css(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'css'), filename)
+
+# Serve JS files from frontend/js/
+@app.route('/js/<path:filename>')
+def serve_js(filename):
+    return send_from_directory(os.path.join(FRONTEND_DIR, 'js'), filename)
 
 @app.route('/ping')
 def ping():

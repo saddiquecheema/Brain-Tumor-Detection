@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Brain Tumor Detection</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+
+  <header>
+    <div class="logo">🧠</div>
+    <div>
+      <h1>Brain Tumor Detection</h1>
+      <p>EfficientNetB0 · Glioma · Meningioma · Pituitary · No Tumor</p>
+    </div>
+    <div class="dot" title="Model loaded"></div>
+  </header>
+
+  <div class="container">
+    <div class="grid">
+
+      <!-- ══ COLUMN 1: Upload ══ -->
+      <div class="card">
+        <div class="card-title">MRI Image Upload</div>
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="file-input" accept="image/*" />
+          <div style="font-size:32px;margin-bottom:8px;opacity:.5">🩻</div>
+          <h3>Image yahan drop karo</h3>
+          <p>ya click karke select karo</p>
+          <div class="fmts">
+            <span class="fmt">JPG</span><span class="fmt">PNG</span>
+            <span class="fmt">BMP</span><span class="fmt">TIFF</span>
+          </div>
+        </div>
+        <div id="preview-box">
+          <img id="prev-img" src="" alt="preview" />
+          <p class="pname" id="prev-name"></p>
+        </div>
+        <div id="err-box"></div>
+        <button class="btn" id="analyze-btn" disabled onclick="analyze()">Analyze MRI</button>
+      </div>
+
+      <!-- ══ COLUMN 2: Results ══ -->
+      <div class="card">
+        <div class="card-title">Analysis Result</div>
+        <div id="placeholder">
+          <div class="phi">📊</div>
+          <p>MRI image upload karke Analyze karo</p>
+        </div>
+        <div id="results">
+          <div class="rimgs">
+            <div><img id="orig-img" src="" alt="Original" />
+              <p>Original MRI</p>
+            </div>
+            <div><img id="ann-img" src="" alt="Annotated" />
+              <p>Annotated</p>
+            </div>
+          </div>
+          <div class="diag-banner" id="diag-banner">
+            <div class="diag-icon" id="diag-icon"></div>
+            <div>
+              <div class="diag-class" id="diag-class"></div>
+              <div class="diag-conf">Confidence: <span id="diag-conf"></span></div>
+            </div>
+          </div>
+          <div class="irow">
+            <div class="ibox"><label>Description</label>
+              <p id="r-desc"></p>
+            </div>
+            <div class="ibox"><label>Advice</label>
+              <p id="r-advice"></p>
+            </div>
+          </div>
+          <div class="ibox">
+            <label>All Probabilities</label>
+            <div id="prob-bars" style="margin-top:8px"></div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- Close Grid -->
+
+    <!-- ── BOTTOM ROW: TUMOR TYPES ── -->
+    <div class="card" style="margin-top:20px">
+      <div class="card-title">Tumor Types Reference</div>
+      <div class="tumor-list">
+        <div class="tumor-item">
+          <div class="ti">🔴</div>
+          <div><strong>Glioma</strong><span>Within brain tissue</span></div>
+        </div>
+        <div class="tumor-item">
+          <div class="ti">🟠</div>
+          <div><strong>Meningioma</strong><span>On the brain covering</span></div>
+        </div>
+        <div class="tumor-item">
+          <div class="ti">🟡</div>
+          <div><strong>Pituitary</strong><span>On the hormone gland</span></div>
+        </div>
+        <div class="tumor-item">
+          <div class="ti">🟢</div>
+          <div><strong>No Tumor</strong><span>Healthy MRI</span></div>
+        </div>
+      </div>
+    </div>
+
+  </div> <!-- Close Container -->
+
+  <!-- ── FLOATING CHATBOT ── -->
+  <div class="chatbot-fab" id="chatbot-fab" onclick="toggleChat()">
+    🤖
+  </div>
+
+  <div class="chatbot-popup" id="chatbot-popup">
+    <div class="chat-header">
+      <h2>🤖 AI Assistant</h2>
+      <div class="close-chat" onclick="toggleChat()">✕</div>
+    </div>
+
+    <div class="chat-wrap">
+      <!-- Messages -->
+      <div class="chat-msgs" id="chat-msgs">
+        <div class="msg bot">
+          Hi! I am medical assistant. How can I help you understand your results?
+        </div>
+      </div>
+
+      <!-- Quick suggestion chips -->
+      <div class="chips" id="chips">
+        <div class="chip" onclick="chipClick(this)">What is Glioma?</div>
+        <div class="chip" onclick="chipClick(this)">Meningioma symptoms?</div>
+        <div class="chip" onclick="chipClick(this)">Pituitary tumor treatment?</div>
+      </div>
+
+      <!-- Input -->
+      <div class="chat-input-row">
+        <textarea class="chat-input" id="chat-input" placeholder="Type a message..." rows="1"
+          onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        <button class="send-btn" id="send-btn" onclick="sendMessage()" title="Send">➤</button>
+      </div>
+      <div class="chat-note">⚠️ Medical AI can make mistakes. Always consult a doctor.</div>
+    </div>
+  </div>
+
+  <script src="/js/app.js"></script>
+</body>
+
+</html>

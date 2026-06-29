@@ -5,9 +5,8 @@
 # ============================================================
 
 # ── Deep Learning ─────────────────────────────────────────────
-tensorflow>=2.16.1          # Includes Keras 3 by default
-# keras is now part of tensorflow 2.16+, but for compatibility:
-keras>=3.0.0
+tensorflow                  # Uses whatever version is installed
+# keras is bundled with tensorflow — no separate install needed
 
 # ── Image Processing ──────────────────────────────────────────
 opencv-python==4.9.0.80     # tumor region annotation (bounding box)
@@ -16,8 +15,8 @@ numpy==1.26.4               # array operations
 
 # ── Web Framework ─────────────────────────────────────────────
 flask==3.1.0                # web server & routing
-flask-cors==5.0.0           # cross-origin requests
+flask-cors==5.0.0           # cross-origin requests (needed for Vercel/ngrok)
 
 # ── AI Chatbot — NeuroGuide ───────────────────────────────────
-groq==0.9.0                 # Groq API — Llama 3.3 70B (free)
+groq==0.9.0                 # Groq API — Llama 3.1 (free)
 python-dotenv==1.0.1        # .env file se GROQ_API_KEY load karna
